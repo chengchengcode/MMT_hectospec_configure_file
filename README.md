@@ -14,7 +14,7 @@ Hecto_match_SDSS_fstar_catalog.pro
 
 Hecto_obs_catalog.pro
 
-Improvements should be:
+# Improvements should be:
 
 1, How to select f star from SDSS
 
