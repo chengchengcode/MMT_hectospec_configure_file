@@ -28,7 +28,7 @@ tab_gsc = mrdfits('gsc.fits',1)
 index = where(tab_gsc.fmag gt 5 and tab_gsc.fmag lt 15.5)
 help, index
 
-readcol, 'ra_dec_offset.txt', a0, a1, a2, a3, a4
+readcol, 'gsc_ra_dec_offset.txt', a0, a1, a2, a3, a4
 delta_ra = a1[0]
 delta_dec = a1[1]
 
