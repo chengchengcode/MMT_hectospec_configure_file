@@ -5,14 +5,19 @@ These idl codes aim to prepare the MMT/Hectospec config file.
 In the order of:
 
 Hecto_guidestar.pro
+
 Hecto_match_gsc_catalog.pro
+
 Hecto_gsc_offset_plot.pro
+
 Hecto_match_SDSS_fstar_catalog.pro
+
 Hecto_obs_catalog.pro
 
 Improvements should be:
 
 1, How to select f star from SDSS
+
 2, ...
 
 My Chinese note is:
