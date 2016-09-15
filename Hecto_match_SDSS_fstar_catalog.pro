@@ -1,5 +1,5 @@
 tab = mrdfits('../catalog/tab_all_spec.fits',1)
-tab_SDSS_fstar = mrdfits('xmmlss_f_stars_cnaw.fits',1)
+tab_SDSS_fstar = mrdfits('xmmlss_f_stars.fits',1)
 
 
 head_img = headfits('../XMM-LSS/CLAUDS_XMMLSS.u.fits')
