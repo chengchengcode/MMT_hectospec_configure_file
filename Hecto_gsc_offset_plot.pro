@@ -82,7 +82,7 @@ set_plot, 'x'
 
 
 
-openw, lun_gsc, 'ra_dec_offset.txt', /get_lun
+openw, lun_gsc, 'gsc_ra_dec_offset.txt', /get_lun
 printf, lun_gsc, 'Delta ra = (ra_OBS - ra_gsc) * cos(dec_gsc) * 3600.d'
 histogauss, ran_x, aa
 printf, lun_gsc, aa
