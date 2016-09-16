@@ -9,7 +9,7 @@ tab_catalog = mrdfits(path_to_spec+specfile, 5, h)
 readcol, path_to_specz + specz_log, target, ra, dec, RMAG, specz, speczerr, qz, a1,a2,a3, class, $
 		format = 'a,d,d,f,f,f,i,i,i,i,a'
 
-index = where(tab_catalog.RMAG lt 23)
+index = sort(tab_catalog.RMAG)
 
 for i_spec = 0, n_elements(index) - 1 do begin
 	
