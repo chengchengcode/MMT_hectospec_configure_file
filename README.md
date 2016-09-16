@@ -156,6 +156,7 @@ d, 不大不小的技巧：
 ---
 
 官网的手册：https://www.cfa.harvard.edu/mmti/hectospec.html
+
 Chris的网页：http://mips.as.arizona.edu/~cnaw/hectospec.html
 
 不是最后的最后，非常感谢Chris老师的耐心帮助，让我对MMT的了解从一个平面网页变得立体，生动起来
