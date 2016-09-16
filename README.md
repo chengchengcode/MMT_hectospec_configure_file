@@ -18,7 +18,9 @@ Hecto_obs_catalog.pro
 
 1, How to select f star from SDSS
 
-2, ...
+2, Get rid of the personal files, upload some real examples
+
+3, ...
 
 
 --------------------------------------------------------------------------------
