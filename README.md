@@ -41,6 +41,7 @@ Hectospec的观测模式是Q，也就是排队，大家要在每个观测季开�
 整个config file的准备过程有:
 
 1, 准备guide star
+-----
 
 MMT需要在望远镜周围，至少两个guide star，很多网站都能下载到guide star catalog，这里说个cadc：
 
@@ -104,6 +105,7 @@ gsc[i_gsc - line_start].r_c = float(strmid(string_temp_line[i_gsc], 2, 6))
 还可以顺便画个图看看
 
 2, 准备f star
+-----
 
 f star是用来做流量定标的，由于其亮的波段和我将会用的所谓270接近，比较合适做流量定标，找f star的方法我还在学习，基本上是从color color上选一下
 
@@ -112,10 +114,12 @@ f star是用来做流量定标的，由于其亮的波段和我将会用的所�
 之后同样的，要做catalog match，程序在Hecto_match_SDSS_fstar_catalog.pro
 
 3, 准备目标源
+-----
 
 这个就是怎么搞的准备好了的需要拍光谱的源列表，没什么好说的，至少有ra dec 和星等吧
 
 4, 准备总的文件
+-----
 
 程序在Hecto_obs_catalog.pro，主要内容是把刚才准备的那些catalog放在一起并且用tab做分隔符来配合即将登场的xfitfibs
 
@@ -141,7 +145,21 @@ d, 不大不小的技巧：
 
 希望再多次一些曝光的暗源也可以这么搞，多出现几次暗源就能把曝光时间延长了
 
+
+-----
+#下集预告：使用xfitfibs的艺术
+
+
+参考：
+---
+
+官网的手册：https://www.cfa.harvard.edu/mmti/hectospec.html
+Chris的网页：http://mips.as.arizona.edu/~cnaw/hectospec.html
+
+不是最后的最后，非常感谢Chris老师的耐心帮助，让我对MMT的了解从一个平面网页变得立体，生动起来
+
 附录：
+---
 
 0，图森的生活：
 
