@@ -30,7 +30,7 @@ MMT/hectospec 笔记一：准备config file
 
 MMT的Hectospec是个多光纤光谱仪，观测流程是望远镜仰脸后用机械臂把光纤放置在合适位置，大约半小时overhead，再指向目标源曝光若干次，每次曝光后有个几分钟把数据读出来，overhead+多次曝光一起叫做一个run或者一个config
 
-Hectospec是个PI的仪器，通过TAP申请的话需要给PI也就是D. E 写邮件申请批准，再把批准的邮件附在申请书最后，我在UA打听了一下，说是完全没听说过这种事，Hectospec的PI是E倒是没错，我猜也许是因为中国的观测申请人还不是很熟悉观测，别胡用乱用用坏了他的Hectospec
+Hectospec是个PI的仪器，通过TAP申请的话需要给PI也就是D. E 写邮件申请批准，再把批准的邮件附在申请书最后
 
 Hectospec的观测模式是Q，也就是排队，大家要在每个观测季开始前两周提交configure file，具体观测的时候会安排最合适此时观测的源来观测，因此尽管给了观测时间某天到某天，但是很可能届时是观测别人的源
 
@@ -49,22 +49,39 @@ MMT需要在望远镜周围，至少两个guide star，很多网站都能下载�
 写一下天区坐标和尺寸，选Html, text, raw 有结果出来，选fits之类的怎么都弄不出来东西，我最终选的是raw的结果，复制到文本里会看到：
 
 _r  GSC2.3  RAJ2000 DEJ2000 Epoch Fmag  jmag  Vmag  Nmag  Class a e
+
 arcmin    deg deg yr  mag mag mag mag   pix 
+
 --------  ----------  ----------  ----------  --------  ----- ----- ----- ----- - ------  -----
+
   0.1729  S0ES003231  035.239661  -04.767139  1995.641  19.45 21.50       17.70 0   1.87   0.03
+
   0.3271  S0ES003182  035.237587  -04.774893  1995.641  18.57 20.08       18.03 3   3.50   0.35
+
   0.5064  S0ES003260  035.238562  -04.761682  1995.641  19.32 20.38             3   1.90   0.05
+
   0.5842  S0ES003185  035.248471  -04.774853  1995.641  18.46 19.87       17.70 3   2.58   0.01
+
   0.8091  S0ES003208  035.226505  -04.771003  1995.641  20.26 21.51             3   1.56   0.36
+
   0.9022  S0ES003217  035.255088  -04.769846  1995.641  19.95 21.98             3   1.88   0.12
+
   0.9469  S0ES003252  035.254531  -04.763727  1995.641  17.26 18.02       17.03 3   3.54   0.12
+
   0.9910  S0ES003106  035.245923  -04.785426  1995.641  19.66 21.43             3   2.60   0.40
+
   0.9935  S0ES003120  035.248762  -04.784070  1982.643        21.87             3   1.54   1.00
+
   1.1402  S0ES003281  035.226090  -04.757000  1995.641  19.78 20.94             3   1.86   0.05
+
   1.1539  S0ES003189  035.259034  -04.773173  1982.643        22.15             3   1.12   0.39
+
   1.2087  S0ES003309  035.239418  -04.749864  1995.641  19.74 20.97             3   2.27   0.38
+
   1.2706  S0ES003314  035.243338  -04.749086  1995.641  18.12 19.41       17.66 0   2.75   0.05
+
   1.3178  S0ES000050  035.254222  -04.753221  1995.641  13.52 14.57       13.24 0   5.54   0.08
+
 
 这种感觉的文档，其中的Fmag差不多是r mag
 
@@ -76,13 +93,13 @@ gsc[i_gsc - line_start].r_c = float(strmid(string_temp_line[i_gsc], 2, 6))
 
 这种感觉，用strmid来取字符串，最后生成fits
 
-我的程序在https://github.com/chengchengcode/MMT_hectospec_configure_file/blob/master/Hecto_guidestar.pro 这里，此时得到的是个fits文件
+对应程序是Hecto_guidestar.pro，此时得到的是个fits文件
 
 接下来要做catalog match来查看 ra dec 的 offset，这一步很有必要，一方面guide star不一定是哪一年拍的，说不定会有自行，另一方面如果offset比较大，会胡guide
 
-我的程序在https://github.com/chengchengcode/MMT_hectospec_configure_file/blob/master/Hecto_match_gsc_catalog.pro 这里，match的思路很简单就是算一下ra dec的距离，为了节省时间我先排出一些明显很远的源再做比较
+程序是Hecto_match_gsc_catalog.pro，match的思路很简单就是算一下ra dec的距离，为了节省时间我先排出一些明显很远的源再做比较
 
-有了match的结果，就可以算offset了，程序是https://github.com/chengchengcode/MMT_hectospec_configure_file/blob/master/Hecto_gsc_offset_plot.pro 生成个文件叫做gsc_ra_dec_offset.txt，用HISTOGAUSS做出来的offset和sigma，有注释
+有了match的结果，就可以算offset了，程序是Hecto_gsc_offset_plot.pro 生成个文件叫做 gsc_ra_dec_offset.txt，用HISTOGAUSS做出来的offset和sigma，有注释
 
 还可以顺便画个图看看
 
@@ -92,9 +109,7 @@ f star是用来做流量定标的，由于其亮的波段和我将会用的所�
 
 假设已经找到了，存在一个fits里
 
-之后同样的，要做catalog match
-
-程序在https://github.com/chengchengcode/MMT_hectospec_configure_file/blob/master/Hecto_match_SDSS_fstar_catalog.pro
+之后同样的，要做catalog match，程序在Hecto_match_SDSS_fstar_catalog.pro
 
 3, 准备目标源
 
@@ -102,9 +117,7 @@ f star是用来做流量定标的，由于其亮的波段和我将会用的所�
 
 4, 准备总的文件
 
-程序在https://github.com/chengchengcode/MMT_hectospec_configure_file/blob/master/Hecto_obs_catalog.pro
-
-主要内容是把刚才准备的那些catalog放在一起并且用tab做分隔符来配合即将登场的xfitfib
+程序在Hecto_obs_catalog.pro，主要内容是把刚才准备的那些catalog放在一起并且用tab做分隔符来配合即将登场的xfitfibs
 
 这里有若干需要注意的地方：
 
