@@ -14,6 +14,19 @@ Hecto_match_SDSS_fstar_catalog.pro
 
 Hecto_obs_catalog.pro
 
+--
+Hecto_spec_show.pro is a code for:
+
+a, Draw the MMT spectrum
+
+b, Download the SDSS stamp image in the same ra dec
+
+c, Creat a latex source file and compile the pdf
+
+d, Open the PDF
+ 
+--
+
 # Improvements should be:
 
 1, How to select f star from SDSS
