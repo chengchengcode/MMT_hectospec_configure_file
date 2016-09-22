@@ -1,5 +1,13 @@
 # MMT_hectospec_configure_file
 
+20160922:
+
+Correct the awkward from the radec, ra, dec, ihr, imin, xsec, ideg, imn, xsc when ideg = 0 and imn, xsc < 0
+
+Correct the index err in Hecto_obs_catalog.pro
+
+
+-------
 These idl codes aim to prepare the MMT/Hectospec config file.
 
 In the order of:
