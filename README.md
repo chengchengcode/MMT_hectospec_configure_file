@@ -39,6 +39,7 @@ Hecto_sdss_img_check.pro is a code for:
 
 wget the SDSS stamp image
 
+--
 
 # Improvements should be:
 
