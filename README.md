@@ -35,6 +35,11 @@ d, Open the PDF
  
 --
 
+Hecto_sdss_img_check.pro is a code for:
+
+wget the SDSS stamp image
+
+
 # Improvements should be:
 
 1, How to select f star from SDSS
