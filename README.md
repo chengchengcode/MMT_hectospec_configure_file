@@ -307,3 +307,172 @@ fit fibber的时候，设置sky的number，mmt的sky做法是随机的放置一�
 
 想起什么再补充吧，每个望远镜都有自己的一套理论，要不断学习，下一节讲数据处理
 
+MMT/Hectospec 数据处理
+------
+
+Hectspec 的数据处理已经有何止是完善的pipeline，最近有了2.0版，整个流程浑浑噩噩，已经没有什么参与感了，相关网页在：
+
+http://mmto.org/node/536
+http://www.mmto.org/~rcool/hsred/hsred_reductions.html
+http://mmto.org/~rcool/hsred/hsred_reductions.html
+
+整个过程基于SDSS的pipeline idl code，最初还要用一些iraf的程序，后来c把程序重写成纯idl的程序，后来又来了一版，也就是现在的样子，安装过程可能碰到的问题是：
+
+1，idlspec2d的lib只有libspec2d.dylib却没有libspec2d.so库，我的做法是在src的Makefile里生成库的那句话后加上 -o $(LIB)/libspec2d.so 这样就生成了so库，安装过程是evilmake all
+
+2，hsred有推荐的sdss 的idl库的版本，建议考虑一下
+
+好下面开始跑程序，下面是270grating的流程，从F star开始：
+
+If the F star is used for calibration, then change the stardstar.dat in path_to/HSRed/etc into the F star catalog of the observation. This is why you need the mag and unreden mag in F star SDSS sql
+
+In the raw data path
+
+hs_pipeline_wrap, /uberextract
+
+Then find the reduction/0100/spHect-xmm_lss_2010_rev_5.0684-0100.fits
+
+error might occur because the raw data include 600 and 270. For bias file its the same, otherwise you need to pick it out:
+
+|spawn, ‘ls *.fits’, name_list
+|spawn, ‘mkdir 600_gpm’
+|for i_list = 0, n_elements(name_list) – 1 do begin
+|	if sxpar(headfits(name_list[i_list]), ‘NAXIS1’) eq 640 then continue
+|	if sxpar(headfits(name_list[i_list],EXT = 1), ‘DISPERSE’) eq ‘600_gpm ‘ and strmid(name_list[i_list], 0, 4) ne ‘bias’ then spawn, ‘mv ‘+name_list[i_list]+’ ./600_gpm’
+|endfor
+
+hs_reduce1d, “The spHect file path”
+
+Then there might be an error from mpfit, which is caused by the fitting code use the old version mpfit in idlutils.
+
+.r /Users/chengcheng/lib_idl/idlutils/pro/mpfit/mpfit.pro
+.r /Users/chengcheng/lib_idl/idlutils/pro/mpfit/mpfitfun.pro
+hs_reduce1d, “The spHect file path”
+
+****************************************
+
+Now you have some spZall, spZbest files etc. This is kind of spec-z catalog now.
+
+One more thing, you need to verify the spec-z. Verfication code is qplot:
+
+1, Config the perl code to generate the cat file, which is used by qplot:
+
+input:
+
+rerun
+obsdir
+source
+configuration
+
+in the first several lines
+
+then:
+
+@cats for the catlog which have been inputed into xfibfits
+
+regions_path	for output path
+root_dir for output path
+
+perl this .pl file then we get the cat file in the obsdir
+
+example of the output:
+
+****************************************
+
+~/Jobs/Extent_SDSS/data_process/idl_code$perl absorbers_reduce.pl
+Name “main::date” used only once: possible typo at absorbers_reduce.pl line 315.
+Name “main::images_cl” used only once: possible typo at absorbers_reduce.pl line 568.
+Name “main::target” used only once: possible typo at absorbers_reduce.pl line 426.
+Name “main::sdss_id” used only once: possible typo at absorbers_reduce.pl line 266.
+Name “main::mask” used only once: possible typo at absorbers_reduce.pl line 358.
+Name “main::fiber” used only once: possible typo at absorbers_reduce.pl line 426.
+Name “main::beam” used only once: possible typo at absorbers_reduce.pl line 426.
+Name “main::raw_data_path” used only once: possible typo at absorbers_reduce.pl line 295.
+Name “main::platex” used only once: possible typo at absorbers_reduce.pl line 427.
+Name “main::regions_path” used only once: possible typo at absorbers_reduce.pl line 289.
+Name “main::id” used only once: possible typo at absorbers_reduce.pl line 426.
+Name “main::platey” used only once: possible typo at absorbers_reduce.pl line 427.
+Name “main::chart” used only once: possible typo at absorbers_reduce.pl line 258.
+root_dir is /Users/chengcheng/Jobs/Extent_SDSS/data_process/ ; dir is /Users/chengcheng/Jobs/Extent_SDSS/data_process//2010.1011
+config 0
+First map file for this configuration is
+/Users/chengcheng/Jobs/Extent_SDSS/data_process//2010.1011/xmm_lss_2010_rev_2.0616_map
+
+First map file for this configuration is
+/Users/chengcheng/Jobs/Extent_SDSS/data_process//2010.1011/xmm_lss_2010_rev_2.0616.cat
+
+reduced file is
+/Users/chengcheng/Jobs/Extent_SDSS/data_process//2010.1011/reduction/0100/spHect-xmm_lss_2010_rev_2.0616-0100.fits
+cannot open /data1/mmt/2010.1011/crank2.idl at absorbers_reduce.pl line 360.
+~/Jobs/Extent_SDSS/data_process/idl_code$perl absorbers_reduce.pl
+Name “main::date” used only once: possible typo at absorbers_reduce.pl line 315.
+Name “main::images_cl” used only once: possible typo at absorbers_reduce.pl line 568.
+Name “main::target” used only once: possible typo at absorbers_reduce.pl line 426.
+Name “main::sdss_id” used only once: possible typo at absorbers_reduce.pl line 266.
+Name “main::fiber” used only once: possible typo at absorbers_reduce.pl line 426.
+Name “main::beam” used only once: possible typo at absorbers_reduce.pl line 426.
+Name “main::raw_data_path” used only once: possible typo at absorbers_reduce.pl line 295.
+Name “main::platex” used only once: possible typo at absorbers_reduce.pl line 427.
+Name “main::regions_path” used only once: possible typo at absorbers_reduce.pl line 289.
+Name “main::id” used only once: possible typo at absorbers_reduce.pl line 426.
+Name “main::platey” used only once: possible typo at absorbers_reduce.pl line 427.
+Name “main::chart” used only once: possible typo at absorbers_reduce.pl line 258.
+root_dir is /Users/chengcheng/Jobs/Extent_SDSS/data_process/ ; dir is /Users/chengcheng/Jobs/Extent_SDSS/data_process//2010.1011
+config 0
+First map file for this configuration is
+/Users/chengcheng/Jobs/Extent_SDSS/data_process//2010.1011/xmm_lss_2010_rev_2.0616_map
+
+First map file for this configuration is
+/Users/chengcheng/Jobs/Extent_SDSS/data_process//2010.1011/xmm_lss_2010_rev_2.0616.cat
+
+reduced file is
+/Users/chengcheng/Jobs/Extent_SDSS/data_process//2010.1011/reduction/0100/spHect-xmm_lss_2010_rev_2.0616-0100.fits
+qplot_cat is /Users/chengcheng/Jobs/Extent_SDSS/data_process//2010.1011/xmm_lss_2010_rev_2.cat
+cat is /Users/chengcheng/Jobs/Extent_SDSS/data_process//2010.1011/xmm_lss_2010_rev_2.0616.cat
+map is /Users/chengcheng/Jobs/Extent_SDSS/data_process//2010.1011/xmm_lss_2010_rev_2.0616_map
+~/Jobs/Extent_SDSS/data_process/idl_code$
+
+****************************************
+
+2, config qplot:
+
+Edit the run_qplot:
+
+data_path	should be the path to the date name file.
+
+file = data_path+date+’/reduction/0100/spHect-‘+program+’_’+config+’.0616-0100.fits’
+spzbest = data_path+date+’/spZall-‘+program+’_’+config+’.0616-0100.fits’
+catalog = data_path+date+’/’+program+’_’+config+’.cat’
+
+remember to change the *0616-0100.fits’* part. But it is OK to leave it there since there will be error message to instruct you change the right path and name.
+
+3, qplot usage:
+
+? is the help comand
+
+a, All the redshfit are judged by you. Usually:
+
+Q = 4 the redshift is clearly identified using more than two significant spectral features.
+Probability P > 95% of being correct.
+Q = 3 the redshift is very likely identified. Multiple spectral features are used, but some of
+the features have low signal-to-noise ratio. 90% < P < 95%.
+Q = 2 the redshift is identified based on single, weak spectral features (including continuum
+break). Probable, but unreliable. P @hecto.batch
+
+Try to understand ALL the error information and fix it. Several tips:
+
+1, run zcat.batch in qplot to make the catalog file more readable by hecto.batch
+
+2, Change the path in hecto.batch as the right ones by hand.
+
+3, mkdir some files for the fitline results.
+
+后续的改进可以有：
+
+1，把整个流程写的连续一些
+
+2，谱线拟合的程序写的更美好一些
+
+3，等等，但都是小改动，需要点时间和耐心，精力和勇气
+
+好了我现在知道怎么处理MMT/Hectospec的数据了
