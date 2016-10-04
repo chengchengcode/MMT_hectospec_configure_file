@@ -476,3 +476,89 @@ Try to understand ALL the error information and fix it. Several tips:
 3，等等，但都是小改动，需要点时间和耐心，精力和勇气
 
 好了我现在知道怎么处理MMT/Hectospec的数据了
+
+
+MMT/hectospec笔记四：数据下载
+----
+---
+
+尽管山上没有宿舍，并不影响我还是有话要说，关于观测
+
+首先是这些网页：
+
+MMT天气：http://www.mmto.org/node/217
+MMT监控：https://www.mmto.org/webcams
+MMT全天：http://skycam.mmto.arizona.edu
+
+其中第三个可以查询下载往日往夜的视频，能看到飞机飞来飞去，云飘来飘去，银河系徐徐推进，日月像两把圆梭
+
+和
+
+夜空中有个红圈，有观测的晚上这个红圈的位置是MMT的指向，结合
+
+https://www.cfa.harvard.edu/~caldwell/outgoing/logs/
+
+可以看到当自己的源被观测的时候，云量月亮如何行走
+
+比如我的源被观测的时候，视频显示中途有一片温柔云，穿堂而过
+
+在郑老师的指导下，我了解到还有更专业的网页：
+
+http://observatories.hodar.com/index.html
+
+可以用来看云识天气，上面有个cam的链接，可以看到各个天文台的此时此刻
+
+由于我一直有看这种全天相机之类的镜头的习惯，每当自己不是很有状态，抓狂或者怎样的时候，我就会打开兴隆或者丽江的相关网页发呆
+
+现在我又得到了更多的发呆网页，会不会影响发呆的质量啊，我问自己
+
+有一天傍晚，这个网页上显示着各个天文台的黄昏，忽然想起一个电影，叫All the Mornings of the World
+
+好，玩够了以后是数据下载，也是为什么我会写第四个笔记：
+
+当目标源被观测后，系统会发来一个sh的脚本，用来指导如何下载，通常是这样的：
+
+#!/bin/sh
+
+# Copy SPEC files from distribution area
+# using TAR via NFS or CURL via HTTP
+
+localtar=gtar
+dowget=0
+
+[ -f $localtar -a -x $localtar ] || localtar=tar # Linux tar is GNUtar
+
+…….
+
+urlbase=https://www.cfa.harvard.edu/oir/data/mmtdist/rawdata/spec/2016C-UAO-G21
+while read filename; do
+curl –create-dirs –tlsv1.1 -o $filename $urlbase/$filename
+done
+fi
+exit 0
+
+这时候，按照来信说明
+
+sh SPEC.2016C-UAO-G21.RAW.161002T1335.sh <dirname>
+
+可能完全无法下载，可能的改动是：
+
+dowget=0 >>> dowget=1
+
+或者由于curl的错误需要把
+
+curl –create-dirs –tlsv1.1 -o $filename $urlbase/$filename
+
+改成
+
+curl –create-dirs –tlsv1 -o $filename $urlbase/$filename
+
+Chris老师的系统是linux，只碰到了wget的问题，我的系统是苹果10.9，需要改动curl那句话
+
+其实如果不介意的话，可以看一下这个sh文件，重新做一个需要下载的文件的链接，直接下载就行
+
+好了，这个系列告一段落
+
+祝大家夜空澄澈，开心快乐
+
+
