@@ -518,24 +518,24 @@ http://observatories.hodar.com/index.html
 
 当目标源被观测后，系统会发来一个sh的脚本，用来指导如何下载，通常是这样的：
 
-#!/bin/sh
-
-# Copy SPEC files from distribution area
-# using TAR via NFS or CURL via HTTP
-
-localtar=gtar
-dowget=0
-
-[ -f $localtar -a -x $localtar ] || localtar=tar # Linux tar is GNUtar
-
-…….
-
-urlbase=https://www.cfa.harvard.edu/oir/data/mmtdist/rawdata/spec/2016C-UAO-G21
-while read filename; do
-curl –create-dirs –tlsv1.1 -o $filename $urlbase/$filename
-done
-fi
-exit 0
+>#!/bin/sh
+>
+># Copy SPEC files from distribution area
+># using TAR via NFS or CURL via HTTP
+>
+>localtar=gtar
+>dowget=0
+>
+>[ -f $localtar -a -x $localtar ] || localtar=tar # Linux tar is GNUtar
+>
+>…….
+>
+>urlbase=https://www.cfa.harvard.edu/oir/data/mmtdist/rawdata/spec/2016C-UAO-G21
+>while read filename; do
+>curl –create-dirs –tlsv1.1 -o $filename $urlbase/$filename
+>done
+>fi
+>exit 0
 
 这时候，按照来信说明
 
